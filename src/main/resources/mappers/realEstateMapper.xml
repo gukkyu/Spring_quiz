@@ -3,43 +3,7 @@
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.quiz.lesson03.mapper.RealEstateMapper">
-	<select id="selectRealEstateByRentPrice" parameterType="int" resultType="com.quiz.lesson03.domain.RealEstate">
-		SELECT
-			`id`
-			,`realtorId`
-			,`address`
-			,`area`
-			,`type`
-			,`price`
-			,`rentPrice`
-			,`createdAt`
-			,`updatedAt`
-		FROM
-			`real_estate`
-		WHERE
-			`rentPrice` &lt; #{rentPrice}
-	</select>
-	
-	<select id="selectRealEstateByAreaPrice" parameterType="map" resultType="com.quiz.lesson03.domain.RealEstate">
-		SELECT
-			`id`
-			,`realtorId`
-			,`address`
-			,`area`
-			,`type`
-			,`price`
-			,`rentPrice`
-			,`createdAt`
-			,`updatedAt`
-		FROM
-			`real_estate`
-		WHERE
-			`type` = '매매'
-			AND `area` &gt; #{area} 
-			AND `price` &lt; #{price}
-	</select>
-	
-	<select id="selectRealEstate" parameterType="map" resultType="com.quiz.lesson03.domain.RealEstate">
+	<select id="selectRealEstateByAreaPrice" resultType="com.quiz.lesson03.domain.RealEstate">
 		SELECT
 			`id`
 			,`realtorId`
