@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.quiz.lesson04.mapper.SellorMapper">
+	<select id="selectSellor" resultType="com.quiz.lesson04.domain.Sellor">
+		SELECT
+			`nickname`
+			,`profileImageUrl`
+			,`temperature`
+			,`createdAt`
+			,`updatedAt`
+		FROM `sellor`
+		ORDER BY `id` DESC
+		LIMIT 1
+	</select>
+	<insert id="insertSellor" parameterType="map">
+		INSERT INTO `sellor`
+		(
+		`nickname`
+		,`profileImageUrl`
+		,`temperature`
+		,`createdAt`
+		,`updatedAt`
+		)
+		VALUES
+		(
+		#{nickname}
+		,#{url}
+		,#{temperature}
+		,NOW()
+		,NOW()
+		)
+		
+	</insert>
+
+</mapper>
