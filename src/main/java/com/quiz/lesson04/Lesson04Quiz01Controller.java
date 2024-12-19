@@ -26,8 +26,8 @@ public class Lesson04Quiz01Controller {
 	@PostMapping("/add-sellor")
 	public String quiz01_2(
 			@RequestParam("nickname") String nickname,
-			@RequestParam("imageUrl") String url,
-			@RequestParam("temperature") double temperature) {
+			@RequestParam(value = "imageUrl", required = false) String url,
+			@RequestParam(value = "temperature", required = false) Double temperature) {
 		
 		sellorBO.addSellor(nickname, url, temperature);
 		
@@ -35,10 +35,10 @@ public class Lesson04Quiz01Controller {
 	}
 	
 	@GetMapping("/sellor-info-view")
-	public String quiz01_3(Model model) {
-		Sellor sellor = sellorBO.getSellor();
+	public String quiz01_3(Model model, @RequestParam(value = "id", required = false) Integer id) {
+		Sellor sellor = sellorBO.getSellor(id);
 		model.addAttribute("result", sellor);
-		
+
 		return "lesson04/sellorInfoView";
 	}
 }

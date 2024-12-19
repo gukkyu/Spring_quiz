@@ -15,7 +15,11 @@ public class SellorBO {
 		sellorMapper.insertSellor(nickname, url, temperature);
 	}
 	
-	public Sellor getSellor() {
+	public Sellor getSellor(Integer id) {
+		if(id == null) {
 		return sellorMapper.selectSellor();
+		} else {
+			return sellorMapper.selectSellorById(id);
+		}
 	}
 }

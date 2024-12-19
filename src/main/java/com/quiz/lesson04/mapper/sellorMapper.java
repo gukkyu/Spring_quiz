@@ -14,4 +14,6 @@ public interface SellorMapper {
 			@Param("temperature") double temperature);
 	
 	public Sellor selectSellor();
+	
+	public Sellor selectSellorById(int id);
 }
