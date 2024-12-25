@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- bootstrap -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="/css/weather-history/weather_style.css">
+	
+	<script>
+	$( function() {
+    	$( "#date" ).datepicker({
+    		dateFormat: 'yy-mm-dd',
+    	});
+    	
+	} );
+	</script>
+</head>
+<body>
+	<div id="wrap">
+		<div class="d-flex">
+			<header class="col-2 bg-primary">
+				<div class="w-100 d-flex justify-content-center">
+					<img class = "my-3"src="https://i.namu.wiki/i/O4LQHBhs-xO9MtRaDmKBJpTwq_4JB4Sv1xfg40iTVHIh0AJdX0O5deGX7oHlcQAg98Xjc8JWrngC819fS2nRqg.svg">
+				</div>
+				<nav class="">
+					<ul class="nav flex-column font-weight-bold">
+						<li class="nav-item py-2"><a class="nav-link text-white text-end" href="weather-list-view">날씨</a></li>
+						<li class="nav-item py-2"><a class="nav-link text-white" href="add-weather-view">날씨입력</a></li>
+						<li class="nav-item py-2"><a class="nav-link text-white" href="#">테마날씨</a></li>
+						<li class="nav-item py-2"><a class="nav-link text-white" href="#">관측 기후</a></li>
+					</ul>
+				</nav>
+			</header>
+			<section class="col-10">
+				<div class="pt-5 pl-4">
+					<h3>날씨 입력</h3>
+				</div>
+				<form method="post" action="/weather/add-weather">
+					<div class="d-flex justify-content-between mt-5">
+						<div class="d-flex align-items-center col-3">
+							<div class="input-label">날짜</div>
+							<input type="text" class="form-control col-8 ml-4" id="date" name="date">
+						</div>
+						<div class="d-flex align-items-center col-3">
+							<div class="input-label">날씨</div>
+							<select class="form-control col-8 ml-4" name="weather">
+								<option>맑음</option>
+								<option>구름조금</option>
+								<option>흐림</option>
+								<option>비</option>
+							</select>
+						</div>
+
+						<div class="d-flex align-items-center col-4">
+							<div class="input-label">미세먼지</div>
+							<select class="form-control col-8 ml-4" name="microDust">
+								<option>좋음</option>
+								<option>보통</option>
+								<option>나쁨</option>
+								<option>최악</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="d-flex justify-content-between mt-5">
+						<div class="d-flex align-items-center">
+							<div class="input-label">기온</div>
+							<div class="input-group col-8 ml-4">
+								<input type="text" class="form-control" name="temperatures">
+								<div class="input-group-append">
+									<span class="input-group-text">℃</span>
+								</div>
+							</div>
+						</div>
+						<div class="d-flex align-items-center">
+							<div class="input-label">강수량</div>
+							<div class="input-group col-8 ml-4">
+								<input type="text" class="form-control" name="precipitation">
+								<div class="input-group-append">
+									<span class="input-group-text">mm</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="d-flex align-items-center">
+							<div class="input-label">풍속</div>
+							<div class="input-group col-8 ml-4">
+								<input type="text" class="form-control" name="windSpeed">
+								<div class="input-group-append">
+									<span class="input-group-text">km/h</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="text-right mt-4 mb-5">
+						<input type="submit" class="btn btn-success" value="저장">
+					</div>
+				</form>
+			</section>
+		</div>
+		<footer class="d-flex align-items-center">
+			<div class="d-flex">
+				<img class="ml-4" src="https://aphrosys.com/img/partners_white/kma.png">
+				<span class="text-muted ml-5">
+					<div><small>(07062) 서울시 동작구 여의대방로 16길 61</small></div>
+					<div><small>Copyright © 2024 KMA. All Rights RESERVED.</small></div>
+				</span>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>

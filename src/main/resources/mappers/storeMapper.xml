@@ -2,11 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
- <mapper namespace="com.quiz.lesson02.mapper.StoreMapper">
- 	<select id="selectStoreList" resultType="com.quiz.lesson02.domain.Store">
+ <mapper namespace="com.quiz.store.mapper.StoreMapper">
+ 	<select id="selectStore" resultType="com.quiz.store.domain.Store">
  		SELECT
- 			*
+ 			`id`
+			,`name`
+			,`phoneNumber`
+			,`address`
+			,`businessNumber`
+			,`introduce`
+			,`createdAt`
+			,`updatedAt`
  		FROM
  			`store`
  	</select>
+ 	
+ 	<select id="selectReviewById" resultType="com.quiz.store.domain.Review">
+ 		SELECT
+ 			`store`.`id`
+ 			,`store`.`name`
+ 		
+ 			,`new_review`.`id`
+			,`new_review`.`storeId`
+			,`new_review`.`menu`
+			,`new_review`.`userName`
+			,`new_review`.`point`
+			,`new_review`.`review`
+			,`new_review`.`createdAt`
+			,`new_review`.`updatedAt`
+		FROM `new_review`
+		JOIN `store`
+        on `store`.id = `new_review`.storeId
+		WHERE `storeId` = #{id} 
+ 	
+ 	</select>
  </mapper>
+ 

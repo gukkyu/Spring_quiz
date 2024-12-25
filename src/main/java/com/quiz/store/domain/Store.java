@@ -1,9 +1,9 @@
-package com.quiz.lesson02.domain;
+package com.quiz.store.domain;
 
 import java.time.LocalDateTime;
 
 public class Store {
-
+	
 	private int id;
 	private String name;
 	private String phoneNumber;
@@ -12,6 +12,7 @@ public class Store {
 	private String introduce;
 	private LocalDateTime createdAt;
 	private LocalDateTime updatedAt;
+	
 	public int getId() {
 		return id;
 	}
