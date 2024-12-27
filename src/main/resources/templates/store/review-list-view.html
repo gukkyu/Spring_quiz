@@ -12,6 +12,7 @@
     header{background-color: #48D1CC;}
     footer{height:80px;}
     #star{width:15px;}
+    .menu{background-color: grey;}
     </style>
 </head>
 <body>
@@ -23,18 +24,20 @@
 		</header>
 		<section>
 			<div class="display-4" th:text="${storename}"></div>
+			<div class="display-4 font-weight-bold mt-3" th:if="${review.isEmpty()}">작성된 리뷰가 없습니다.</div>
 			<th:block th:each="review, status: ${review}">
-				<div th:if="${status.count} >= 1" id="storeList" class="w-100 my-3 p-3">
+				<div th:if="${status.count} >= 1" id="storeList" class=" my-3 p-3">
 					<div class="d-flex align-items-center">
 						<span class="font-weight-bold my-2 mr-2" th:text="${review.userName}"></span>
 						<th:block th:each="value : ${#numbers.sequence(0, 4)}">
 								<img id="star" th:if="${review.point - value} >= 1" src="/img/star_fill.png">
 								<img id="star" th:if="${review.point - value} <= 0" src="/img/star_empty.png">
-								<img id="star" th:if="${review.point - value >= 0 && review.point - value < 1}" src="/img/star_half.png">
+								<img id="star" th:if="${review.point - value >= 0.5 && review.point - value < 1}" src="/img/star_half.png">
 						</th:block>
 					</div>
 					<div><small class="mb-1 text-muted" th:text="${#temporals.format(review.updatedAt, 'yyyy년 MM월 dd일')}"></small></div>
 					<div class="mb-1" th:text="${review.review}"></div>
+					<div class="mb-1 text-white"><small class="menu p-1" th:text="${review.menu}"></small></div>
 				</div>
 			</th:block>
 		</section>

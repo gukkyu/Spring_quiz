@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>예약하기</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/booking/booking-style.css">
+</head>
+<body>
+	<div class="container">
+		<header class="d-flex justify-content-center">
+			<div class="display-4 my-3">통나무 펜션</div>
+		</header>
+		<nav>
+			<ul class="menu nav nav-fill">
+				<li class="nav-item"><a class="nav-link text-white">팬션소개</a></li>
+				<li class="nav-item"><a class="nav-link text-white">객실보기</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="/booking/add-booking">예약하기</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="/booking/booking-list">예약목록</a></li>
+			</ul>
+		</nav>
+		<section class="d-flex justify-content-center">
+			<div id="reservation-form">
+				<div class="display-4 my-3">예약하기</div>
+				<div>
+					<div>
+						<b>이름</b>
+						<div><input type="text" id="name" class="form-control mt-2"></div>
+						<span id="nameCheck"></span>
+					</div>
+					<div class="mt-2">
+						<b>예약날짜</b>
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<div><small>체크인 날짜</small></div>
+								<input type="text" id="checkIn" class="form-control mt-2">
+								<span id="checkInCheck"></span>
+							</div>
+							<span class="mx-3">~</span>
+							<div>
+								<div><small>체크아웃 날짜</small></div>
+								<input type="text" id="checkOut" class="form-control mt-2">
+								<span id="checkOutCheck"></span>
+							</div>
+						</div>
+					</div>
+					<div class="mt-2">
+						<b>숙박인원</b>
+						<div><input type="text" id="headcount" class="form-control mt-2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+						<span id="headcountCheck"></span>
+					</div>
+					<div class="mt-2">
+						<b>전화번호</b>
+						<div><input type="text" id="phoneNumber" class="form-control mt-2" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"></div>
+						<span id="phoneNumberCheck"></span>
+					</div>
+				</div>
+				<div class="mt-5">
+					<button id="submit" class="btn btn-success w-100">예약하기</button>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<small class="text-muted">
+				<div>제주특별자치도 제주시 애월읍</div>
+				<div>사업자등록번호: 111-22-255222 / 농어촌민박사업자지정 / 대표: 김통목</div>
+				<div>Copyright 2024 tongnamu. All rights reserved.</div>
+			</small>
+		</footer>
+	</div>
+	
+	<script>
+		$(document).ready(function(){
+		
+			$("#checkIn").datepicker({
+				dateFormat: 'yy년 mm월 dd일',
+				dayNamesMin: ['일','월','화','수','목','금','토'],
+				minDate: 0,
+				onSelect: function(dataText){
+					$("#checkOut").datepicker("option", "minDate", dataText);
+				}
+			});
+			$("#checkOut").datepicker({
+				dateFormat: 'yy년 mm월 dd일',
+				dayNamesMin: ['일','월','화','수','목','금','토']
+			});
+			
+			$("#submit").on("click", function(){
+				
+				
+				let name = $("#name").val().trim();
+				let checkIn = $("#checkIn").val().trim();
+				let checkOut = $("#checkOut").val().trim();
+				let headcount = $("#headcount").val().trim();
+				let phoneNumber = $("#phoneNumber").val().trim();
+				let fixedNumber = phoneNumber.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+				
+				$("#nameCheck").empty();
+				$("#checkInCheck").empty();
+				$("#checkOutCheck").empty();
+				$("#headcountCheck").empty();
+				$("#phoneNumberCheck").empty();
+				
+				if(!name){
+					$("#nameCheck").append('<small class="text-danger">이름을 입력하세요.</small>');
+					return;
+				}
+				if(!checkOut){
+					$("#checkOutCheck").append('<small class="text-danger">체크아웃 날짜를 선택하세요.</small>');
+					return;
+				}
+				if(headcount > 7){
+					$("#headcountCheck").append('<small class="text-danger">최대 7명까지 가능합니다.</small>');
+					return;
+				}
+				if(fixedNumber.length != 13){
+					$("#phoneNumberCheck").append('<small class="text-danger">전화번호를 확인하세요.</small>');
+					return;
+				}
+				
+				$.ajax({
+		            type: "Post",
+		            url: "/booking/add-booking-post",
+		            data: {
+		                "name": name, 
+		                "checkIn": checkIn, 
+		                "checkOut": checkOut, 
+		                "headcount": headcount, 
+		                "phoneNumber": fixedNumber
+		            },
+		            success: function(data){
+		                if(data.code == 200){
+		                    location.href = "/booking/booking-list";
+		                } else if(data.code == 404){
+		                    alert(data.result);
+		                }
+		            },
+		            error: function(e){
+		                alert("예약 실패!");
+		            }
+		        });
+			});
+		});
+	</script>
+</body>
+</html>

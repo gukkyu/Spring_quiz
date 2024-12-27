@@ -18,47 +18,77 @@
 			</div>
 			<div class="form-group">
 				<label for="url">주소</label>
-				<input type="text" name="url" id="url" class="form-control">
+				<div class="d-flex">
+					<input type="text" name="url" id="url" class="form-control">
+					<button type="button" id="btnCheck" class="btn btn-info form-control col-1">중복확인</button>
+				</div>
+				<small id="checking"></small>
 			</div>
-			<button type="button" id="btn" class="form-control btn btn-success">추가</button>
+			<button type="button" id="btnSubmit" class="form-control btn btn-success">추가</button>
 		</form>
 	</div>
 </body>
 <script>
 	$(document).ready(function(){
-		$("#btn").on("click", function(){
-			
-			let title = $("#title").val().trim();
-			let url = $("#url").val().trim();
-			
+		// 전역 변수로 title과 url 선언
+		let title, url;
+		// title과 url 값을 가져옵니다.
+		title = $("#title").val().trim();
+		url = $("#url").val().trim();
+
+		$("#btnCheck").on("click", function(){
+			$("#checking").empty();
 			if(title == ""){
 				alert("제목을 입력하세요.");
 				return;
 			}
 			
 			if(url.length < 1){
-				alert("url을 입력하세요.");
+				$("#checking").append('<span class="text-danger">url을 입력하세요.</span>');
 				return;
 			}
 			if((url.startsWith("http://") || url.startsWith("https://")) == false){
-				alert("url이 http:// 이거나 https:// 로 시작하는지 확인해주세요.");
+				$("#checking").append('<span class="text-danger">url이 http:// 이거나 https:// 로 시작하는지 확인해주세요.</span>');
 				return;
 			}
 			
-			console.log(title);
-			console.log(url);
-			
 			$.ajax({
-				type:"POST",
-				url:"/lesson06/quiz01/add-bookmark",
-				data:{"title": title, "url": url},
-				success:function(data){
-					if (data.result == "성공") {
-						location.href = "/lesson06/quiz01/after-add-bookmark"; // GET 요청 - 가입완료 화면
+				type: "get",
+				url: "/lesson06/quiz01/isDuplicateUrl",
+				data: { "url": url },
+				success: function(data){
+					if(data.is_duplicate){
+						$("#checking").append('<span class="text-danger">중복된 url입니다.</span>');
+						return;
+					} else {
+						$("#checking").append('<span class="text-success">ok!</span>');
 					}
 				},
-				error:function(xhr, status, error){
-					alert("북마크 추가 실패!");
+				error: function(xhr, status, error){
+					$("#checking").append('<span class="text-danger">서버 오류가 발생했습니다. 다시 시도해주세요.</span>');
+				}
+			});
+		});
+		
+		$("#btnSubmit").on("click", function(){
+			// title과 url이 제대로 입력되었는지 확인
+			if($("#checking").children().length > 0){
+				alert("중복확인을 해주세요.");
+			}
+
+			$.ajax({
+				type: "POST",
+				url: "/lesson06/quiz01/add-bookmark",
+				data: { "title": title, "url": url },
+				success: function(data){
+					if (data.result == "성공") {
+						location.href = "/lesson06/quiz01/after-add-bookmark"; // GET 요청 - 가입완료 화면
+					} else {
+						alert("북마크 추가 실패! 서버에서 오류가 발생했습니다.");
+					}
+				},
+				error: function(xhr, status, error){
+					alert("북마크 추가 실패! 서버 오류가 발생했습니다.");
 				}
 			});
 		});
