@@ -1,6 +1,7 @@
 package com.quiz.booking.bo;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class BookingBO {
 	}
 	
 	public int addBooking(String name, LocalDate checkIn, LocalDate checkOut, int headcount, String phoneNumber) {
-		int day = checkOut.compareTo(checkIn);
+		int day = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
 		return bookingMapper.insertBooking(name, checkIn, day, headcount, phoneNumber);
 	}
 }

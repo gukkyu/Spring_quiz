@@ -100,6 +100,9 @@
 				let phoneNumber = $("#phoneNumber").val().trim();
 				let fixedNumber = phoneNumber.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
 				
+				let message = false;
+				
+				
 				$("#nameCheck").empty();
 				$("#checkInCheck").empty();
 				$("#checkOutCheck").empty();
@@ -108,18 +111,30 @@
 				
 				if(!name){
 					$("#nameCheck").append('<small class="text-danger">이름을 입력하세요.</small>');
-					return;
+					message = true;
+				}
+				if(!checkIn){
+					$("#checkInCheck").append('<small class="text-danger">체크인 날짜를 선택하세요.</small>');
+					message = true;
 				}
 				if(!checkOut){
 					$("#checkOutCheck").append('<small class="text-danger">체크아웃 날짜를 선택하세요.</small>');
-					return;
+					message = true;
+				}
+				if(!headcount){
+					$("#headcountCheck").append('<small class="text-danger">숙박인원을 기입하세요.</small>');
+					message = true;
 				}
 				if(headcount > 7){
 					$("#headcountCheck").append('<small class="text-danger">최대 7명까지 가능합니다.</small>');
-					return;
+					message = true;
 				}
 				if(fixedNumber.length != 13){
 					$("#phoneNumberCheck").append('<small class="text-danger">전화번호를 확인하세요.</small>');
+					message = true;
+				}
+				
+				if(message == true){
 					return;
 				}
 				
