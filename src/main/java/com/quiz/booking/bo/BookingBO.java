@@ -27,4 +27,8 @@ public class BookingBO {
 		int day = (int) ChronoUnit.DAYS.between(checkIn, checkOut);
 		return bookingMapper.insertBooking(name, checkIn, day, headcount, phoneNumber);
 	}
+	
+	public Booking getBooking(String name, String phoneNumber){
+		return bookingMapper.selectBookingById(name, phoneNumber);
+	}
 }

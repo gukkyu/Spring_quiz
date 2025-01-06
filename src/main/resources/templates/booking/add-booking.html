@@ -51,12 +51,12 @@
 					</div>
 					<div class="mt-2">
 						<b>숙박인원</b>
-						<div><input type="text" id="headcount" class="form-control mt-2" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"></div>
+						<div><input type="text" id="headcount" class="form-control mt-2"></div>
 						<span id="headcountCheck"></span>
 					</div>
 					<div class="mt-2">
 						<b>전화번호</b>
-						<div><input type="text" id="phoneNumber" class="form-control mt-2" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');"></div>
+						<div><input type="text" id="phoneNumber" class="form-control mt-2"></div>
 						<span id="phoneNumberCheck"></span>
 					</div>
 				</div>
@@ -88,6 +88,20 @@
 			$("#checkOut").datepicker({
 				dateFormat: 'yy년 mm월 dd일',
 				dayNamesMin: ['일','월','화','수','목','금','토']
+			});
+			
+			$("#headcount").on("keyup", function(){
+				value = /[^0-9]/g;
+				phoneNumber = $(this).val();
+				
+				if(value.test(phoneNumber)){
+					$(this).val(phoneNumber.replace(value, ''));
+					$(this).focus();
+				}
+			});
+			
+			$("#phoneNumber").on("keyup", function(){
+				this.value = this.value.replace(/[^a-zA-Z]/gi, '');
 			});
 			
 			$("#submit").on("click", function(){

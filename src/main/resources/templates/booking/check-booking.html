@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+	<link rel="stylesheet" type="text/css" href="/css/booking/booking-style.css">
+</head>
+<body>
+	<div class="container">
+		<header class="d-flex justify-content-center">
+			<div class="display-4 my-3">통나무 펜션</div>
+		</header>
+		<nav>
+			<ul class="menu nav nav-fill">
+				<li class="nav-item"><a class="nav-link text-white">팬션소개</a></li>
+				<li class="nav-item"><a class="nav-link text-white">객실보기</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="/booking/add-booking">예약하기</a></li>
+				<li class="nav-item"><a class="nav-link text-white" href="/booking/booking-list">예약목록</a></li>
+			</ul>
+		</nav>
+		<section>
+			<div>
+				<img src="/img/test06_banner1.jpg" class="image w-100">
+			</div>
+			<div class="d-flex">
+				<div class="check-box col-4 bg-danger d-flex align-items-center justify-content-center">
+					<div class="text-white">
+						<div class="display-4">실시간</div>
+						<div class="display-4">예약하기</div>
+					</div>
+				</div>
+				<div class="check-box col-4 bg-warning">
+					<h3 class="text-white my-3">예약 확인</h3>
+					<div class="d-flex text-white align-items-center justify-content-end mb-3">
+						<div>이름</div>
+						<input type="text" id="name" class="ml-3 guest-info form-control">
+					</div>
+					<div class="d-flex text-white align-items-center justify-content-end mb-3">
+						<div>전화번호</div>
+						<input type="text" id="phoneNumber" class="ml-3 guest-info form-control">
+					</div>
+					<div class="d-flex justify-content-end">
+						<button type="button" id="searchBtn" class="btn btn-success">조회하기</button>
+					</div>
+				</div>
+				<div class="check-box col-4 bg-danger d-flex align-items-center justify-content-center">
+					<div class="text-white">
+						<h3 class="font-weight-bold">예약문의:</h3>
+						<div class="display-4 font-weight-bold">010-</div>
+						<div class="display-4 font-weight-bold">0000-1111</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer>
+			<small class="text-muted">
+				<div>제주특별자치도 제주시 애월읍</div>
+				<div>사업자등록번호: 111-22-255222 / 농어촌민박사업자지정 / 대표: 김통목</div>
+				<div>Copyright 2024 tongnamu. All rights reserved.</div>
+			</small>
+		</footer>
+	</div>
+	
+	<script>
+		$(document).ready(function(){
+			
+			let imageArr = ['/img/test06_banner1.jpg','/img/test06_banner2.jpg','/img/test06_banner3.jpg','/img/test06_banner4.jpg'];
+			let currentIndex = 0;
+			setInterval(function(){
+				$(".image").attr('src', imageArr[currentIndex]);
+				currentIndex++;
+				
+				if(currentIndex > imageArr.length - 1){
+					currentIndex = 0;
+				}
+			}, 3000);
+			
+			$("#phoneNumber").on("keyup", function(){
+				value = /[^-0-9]/g;
+				phoneNumber = $(this).val();
+				
+				if(value.test(phoneNumber)){
+					$(this).val(phoneNumber.replace(value, ''));
+					$(this).focus();
+				}
+			});
+			
+			$("#searchBtn").on("click", function(){
+				let name = $("#name").val().trim();
+				let phoneNumber = $("#phoneNumber").val().trim();
+				let fixedNumber = phoneNumber.replace(/[^0-9]/g, '').replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+				
+				if(!name){
+					alert("이름을 입력하세요.");
+				}
+				if(fixedNumber.length != 13){
+					alert("전화번호를 확인하세요.");
+				}
+				
+				$.ajax({
+					type:"POST",
+					url:"/booking/check-booking-post",
+					data:{"name": name, "phoneNumber": fixedNumber},
+					
+					success: function(data){
+						
+						if(data.code == 200){
+							alert("이름 : " + data.result.name
+									+ "\n날짜 : " + data.result.date
+									+ "\n일수 : " + data.result.day
+									+ "\n인원 : " + data.result.headcount
+									+ "\n상태 : " + data.result.state);
+						} else if (data.code == 404){
+							alert(data.error_message);
+						}
+					},
+					error: function(e){
+						alert("확인에 실패했습니다.");
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

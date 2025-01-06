@@ -47,4 +47,20 @@
 			,NOW()
 		)
 	</insert>
+	
+	<select id="selectBookingById" resultType="com.quiz.booking.domain.Booking">
+		SELECT
+			`id`
+			,`name`
+			,`headcount`
+			,`day`
+			,`date`
+			,`phonenumber`
+			,`state`
+			,`createdAt`
+			,`updatedAt`
+		FROM
+			`booking`
+		WHERE `name` = #{name} and `phonenumber` = #{phoneNumber}
+	</select>
 </mapper>

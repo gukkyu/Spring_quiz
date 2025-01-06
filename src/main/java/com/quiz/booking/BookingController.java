@@ -81,4 +81,29 @@ public class BookingController {
 		return result;
 	}
 	
+	@GetMapping("check-booking")
+	public String checkBooking() {
+		return "booking/check-booking";
+	}
+	
+	@PostMapping("check-booking-post")
+	@ResponseBody
+	public Map<String, Object> getBookingByName(
+			@RequestParam("name") String name,
+			@RequestParam("phoneNumber") String phoneNumber){
+		
+		Booking booking = bookingBO.getBooking(name, phoneNumber);
+		
+		Map<String, Object> result = new HashMap<>();
+		if(booking == null) {
+			result.put("code", 404);
+			result.put("error_message", "조회 실패");
+		} else {
+			result.put("code", 200);
+			result.put("result", booking);
+		}
+		
+		return result;
+	}
+	
 }
